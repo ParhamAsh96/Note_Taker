@@ -8,7 +8,7 @@ __pycache__/
 
 # API Keys
 stt_API.json
-stt_API2.json
+storage_API.json
 
 # C extensions
 *.so
