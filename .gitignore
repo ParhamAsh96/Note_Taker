@@ -6,6 +6,10 @@ __pycache__/
 # Apple
 .DS_Store
 
+# API Keys
+stt_API.json
+stt_API2.json
+
 # C extensions
 *.so
 
