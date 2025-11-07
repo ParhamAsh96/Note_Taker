@@ -19,6 +19,8 @@ headers = {
 
 
 def read_data():
+    print("Reading the note...")
+    
     with open("src/notetaker/core/data/summary.json", "r") as file:
         summary = json.load(file)
 
@@ -60,10 +62,14 @@ data = create_template(course, title, date, description, takeaways_text)
 def create_page(data: dict) :
     create_url = "https://api.notion.com/v1/pages"
 
-    payload ={"parent": {"database_id": DATABASE_ID}, "properties": data}
+    payload = {"parent": {"database_id": DATABASE_ID}, "properties": data}
 
     res = requests.post(create_url, headers=headers, json=payload)
-    print(res. status_code)
+    if res.status_code == 200:
+        print("The note was successfully transferred to the Notion app.")
+    else:
+        print(f"Something went wrong: Error {res.status_code}")
+              
     return res
 
 
