@@ -1,6 +1,7 @@
 import pyaudio
 import time
 import wave
+import threading
 
 
 def record_voice():
@@ -24,20 +25,33 @@ def record_voice():
                 frames_per_buffer=FRAMES_PER_BUFFER
                 )
             
-            start = time.time()
-            print("Start recording...\n")
+            print("\nStart recording...")
 
-            second = 60
+            stop_recording = threading.Event()
+
+            def wait_for_input():
+                is_correct_answer = False
+                while not is_correct_answer:
+                    if input("Type 'stop' to end: ").strip().lower() == "stop":
+                        stop_recording.set()
+                        is_correct_answer = True
+                    else:
+                        print("Wrong input.")
+
+            threading.Thread(target=wait_for_input, daemon=True).start()
+
+            start = time.time()
             frames = []
-            for i in range(0, int(RATE/FRAMES_PER_BUFFER*second)):
-                data = stream.read(FRAMES_PER_BUFFER)
+            while not stop_recording.is_set():
+                data = stream.read(FRAMES_PER_BUFFER, exception_on_overflow=False)
                 frames.append(data)
 
+
+            end = time.time()
             stream.stop_stream()
             stream.close()
             p.terminate()
 
-            end = time.time()
             length = (end - start) / 60
             print(f"Recording duration: {length:.2f} minutes\n")
 
