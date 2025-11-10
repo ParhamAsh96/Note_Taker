@@ -25,7 +25,7 @@ def transcribe_voice():
 
 
     print("Waiting for operation to complete...\n")
-    response = operation.result(timeout=90)
+    response = operation.result(timeout=10800)
 
     full_text = " ".join(r.alternatives[0].transcript.strip() for r in response.results)
     print("The audio file was successfully transcribed.\n")
