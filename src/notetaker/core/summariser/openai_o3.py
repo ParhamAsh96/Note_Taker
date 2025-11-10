@@ -1,4 +1,5 @@
 import json
+import time
 from pathlib import Path
 from openai import OpenAI
 
@@ -18,21 +19,44 @@ def summarize_transcript(path="src/notetaker/core/data/transcript.json"):
     course = data.get("Course", "Unknown course")
     title = data.get("Title", "Untitled")
     date  = data.get("Date", "Unknown date")
-    text  = data.get("Description", "")
+    summary  = data.get("Description", "")
 
     system = (
         "You are a careful note-taker. Write in clear B2 English. "
         "Do not invent facts. If something is unclear, write 'Unknown'. "
-        "Return valid JSON only."
+        "Return ONLY one valid JSON object (no prose, no markdown). "
+        "Use exactly these keys: 'course', 'title', 'date', 'summary', 'take-aways'. "
+        "For 'take-aways', write 6–8 short points"
+        "Use standard JSON (double quotes, no trailing commas)."
     )
 
     user_instructions = (
+        "Task: Read the transcript and produce the JSON object in the schema below.\n\n"
         f"Course: {course}\n"
         f"Title: {title}\n"
         f"Date: {date}\n\n"
         "Task: Summarize the transcript, then list the most important take-aways "
-        "with short explanations. Max 7 take-aways.\n\n"
-        "Transcript:\n" + text
+        "with short explanations. Max 8 take-aways.\n\n"
+        "Rules:\n"
+        "- Keep/confirm the course name.\n"
+        "- Keep the given title (if any).\n"
+        "- Description: one SINGLE continuous string of about 1950 characters total.\n"
+        "- Inside that one string, include BOTH:\n"
+        "    • At least 1000 characters that summarize the lecture.\n"
+        "    • At least 550 characters that give a detailed explanation of the key ideas.\n"
+        "- Blend summary and detailed explanation naturally (no headings, no labels, no section breaks, no bullet points).\n"
+        "- Use simple B2-level language, coherent flow, and avoid repetition and filler.\n"
+        "- take-aways: 6–8 key points joined into one string using '; '. (limit 400 characters).\n\n"
+        "Output schema (example values only):\n"
+        "{\n"
+        "  'course': 'course name from the transcript',\n"
+        "  'title': 'Lecture title from the input',\n"
+        "  'date': 'Lecture title from the input',\n"
+        "  'summary': '<one continuous ~800–900 word string combining summary (≥500 words) and detailed explanation (≥300 words)>',\n"
+        "  'take-aways': 'point 1; point 2; point 3'\n"
+        "}\n"
+        "Return only the JSON object."
+        "Transcript:\n" + summary
     )
 
     resp = client.responses.create(
@@ -42,16 +66,3 @@ def summarize_transcript(path="src/notetaker/core/data/transcript.json"):
     )
 
     return resp.output_text
-
-
-def save_summary():
-    raw = summarize_transcript()
-    try:
-        data = json.loads(raw)
-
-    except json.JSONDecodeError:
-        data = {"summary": raw, "takeaways": []}
-
-
-    with open("src/notetaker/core/data/summary.json", "w", encoding="utf-8") as file:
-        json.dump(data, file, ensure_ascii=False, indent=2)
