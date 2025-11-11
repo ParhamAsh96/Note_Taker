@@ -1,6 +1,6 @@
 # LectureLens
 <p align="center">
-  <img src="./docs/Logo/LectureLens_logo.png" alt="LectureLens Logo" width="180" />
+  <img src="./docs/Logo/LectureLens_logo.png" alt="LectureLens Logo" width="480" />
 </p>
 
 Turn any **university lecture** into **clean notes, key explanations, and take-aways**—auto-saved to Notion.
