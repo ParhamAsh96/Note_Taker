@@ -1,11 +1,12 @@
 import time
-from notetaker.core.audio_recorder.recorder import record_voice
-from notetaker.core.google_storage.voice_saver import uplaod_voice
-from notetaker.core.speech_to_text.google_stt import transcribe_voice
-from notetaker.core.transcript_saver.transcript_saver import save_transcript
-from notetaker.core.summariser.openai_o3 import save_summary
-from notetaker.core.publisher.notion_publisher import publish_notes
-from notetaker.core.cleaner.cleaner import clean_data
+from src.notetaker.core.audio_recorder.recorder import record_voice
+from src.notetaker.core.google_storage.voice_saver import uplaod_voice
+from src.notetaker.core.speech_to_text.google_stt import transcribe_voice
+from src.notetaker.core.transcript_saver.transcript_saver import save_transcript
+from src.notetaker.core.summariser.openai_o3 import summarize_transcript
+from src.notetaker.core.summary_saver.summary_saver import save_summary
+from src.notetaker.core.publisher.notion_publisher import publish_notes
+from src.notetaker.core.cleaner.cleaner import clean_data
 
 
 def main():
@@ -28,12 +29,15 @@ def main():
     save_transcript(course_name, lecture_title, full_text)
 
     # Filter 5
-    save_summary()
+    summary = summarize_transcript(path="src/notetaker/core/data/transcript.json")
 
     # Filter 6
+    save_summary(summary)
+    
+    # Filter 7
     publish_notes()
 
-    # Filter 7
+    # Filter 8
     clean_data()
     end = time.time()
 
