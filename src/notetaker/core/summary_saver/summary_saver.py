@@ -1,10 +1,9 @@
-import time
-import json
+import time, json
 
 
 def save_summary(raw):
     print("Summarizing...")
-    time.sleep(10)
+    time.sleep(5)
     try:
         data = json.loads(raw)
 

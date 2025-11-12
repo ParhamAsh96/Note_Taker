@@ -1,7 +1,4 @@
-import pyaudio
-import time
-import wave
-import threading
+import pyaudio, wave, time, threading
 
 
 def record_voice():
