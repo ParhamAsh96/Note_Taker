@@ -1,0 +1,16 @@
+# audio recording
+portaudio
+pyaudio
+
+# Google Cloud (Speech-to-Text + Storage + auth/core deps)
+google-cloud-speech
+google-cloud-storage
+google-auth
+google-api-core
+
+# OpenAI new SDK
+openai
+
+# HTTP client for Notion REST calls
+requests
+
