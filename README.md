@@ -92,18 +92,19 @@ Create a `.env` (or export in your shell):
 
 ```bash
 # Google
-GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json
-GCP_PROJECT=my-gcp-project
-GCS_BUCKET=lecturelens-audio
+GOOGLE_SPEECH_CREDENTIALS=./config/gcp_credentials.json
+GOOGLE_STORAGE_CREDENTIALS=./config/gcp_credentials.json
+
+GCP_PROJECT="gcp-project-id"
+GCS_BUCKET="gcp-bucket-id"
+GCS_AUDIO_URI="gs://uri"
+GCS_LOCATION="EU"
 
 # OpenAI
-OPENAI_API_KEY=sk-...
+OPENAI_API_KEY=./config/api_key.json
 
 # Notion
-NOTION_TOKEN=secret_...
-NOTION_PAGE_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-# or:
-# NOTION_DATABASE_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+NOTION_API_KEY=./config/api_key.json
 
 # Optional
 ENV=production
